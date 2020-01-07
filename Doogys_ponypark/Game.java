@@ -34,7 +34,7 @@ public class Game
      */
     private void createRooms()
     {
-        Room /*beginruimte*/ plein, doogy_dinner, doogy_kamer, stal, reuzeplein, straat, huis1, huis2, huis3;
+        Room /*beginruimte*/ zolder, plein, doogy_dinner, doogy_kamer, stal, reuzeplein, straat, huis1, huis2, huis3;
       
         // create the rooms
         //beginruimte = new Room("Hier begin je");
@@ -43,22 +43,38 @@ public class Game
         doogy_kamer = new Room("in de kamer van Doogy");
         stal = new Room("in de stal met paarden");
         reuzeplein = new Room("op het plein met een reuzenrad");
-        straat = new Room("in een straat met 3 huizen");
-        huis1 = new Room("in huis 1 het ruikt alof er hier iets verborgen ligt");
+        straat = new Room("in een straat met 2 huizen");
+        zolder = new Room("zolder het ruikt alof er hier iets verborgen ligt");
         huis2 = new Room("in huis 2 met een erg mooi schilderij aan de muur");
         huis3 = new Room("in huis 3, een erg dubieus huis hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm???");
         
         // initialise room exits
         //beginruimte.setExits(null, straat, plein, null);
-        plein.setExits(null, reuzeplein, stal, doogy_dinner);
-        doogy_dinner.setExits(null, plein, doogy_kamer, null);
-        doogy_kamer.setExits(doogy_dinner, null, null, null);
-        stal.setExits(plein, null, null, null);
-        reuzeplein.setExits(straat, null, null, plein);
-        straat.setExits(huis2, huis3, reuzeplein, null);
-        huis1.setExits(null, huis2, null, null);
-        huis2.setExits(null, null, straat, huis1);
-        huis3.setExits(null, null, null, straat);
+        //plein.setExits(null, reuzeplein, stal, doogy_dinner);
+        plein.setExits("oost", reuzeplein);
+        plein.setExits("zuid", stal);
+        plein.setExits("west", doogy_dinner);
+        //doogy_dinner.setExits(null, plein, doogy_kamer, null);
+        doogy_dinner.setExits("oost", plein);
+        doogy_dinner.setExits("zuid", doogy_kamer);
+        //doogy_kamer.setExits(doogy_dinner, null, null, null);
+        doogy_kamer.setExits("noord", doogy_dinner);
+        //stal.setExits(plein, null, null, null);
+        stal.setExits("noord", plein);
+        //reuzeplein.setExits(straat, null, null, plein);
+        reuzeplein.setExits("noord", straat);
+        reuzeplein.setExits("west", plein);
+        //straat.setExits(huis2, huis3, reuzeplein, null);
+        straat.setExits("noord", huis2);
+        straat.setExits("oost", huis3);
+        straat.setExits("zuid", reuzeplein);
+        //huis1.setExits(null, huis2, null, null);
+        zolder.setExits("omlaag", huis2);
+        //huis2.setExits(null, null, straat, huis1);
+        huis2.setExits("zuid", straat);
+        huis2.setExits("omhoog", zolder);
+        //huis3.setExits(null, null, null, straat);
+        huis3.setExits("west", straat);
         
 
         currentRoom = plein;  // start game in beginruimte
@@ -87,7 +103,7 @@ public class Game
    {
      
        System.out.println("Je bent " + currentRoom.getDescription()); 
-       System.out.print("Doorgangen: " + currentRoom.getExitString());
+       System.out.print(currentRoom.getExitString());
        System.out.println();     
     }
 

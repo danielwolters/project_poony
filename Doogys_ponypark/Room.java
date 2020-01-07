@@ -1,4 +1,4 @@
-
+import java.util.Set;
 import java.util.HashMap;
 /**
  * Class Room - a room in an adventure game.
@@ -17,10 +17,7 @@ import java.util.HashMap;
 public class Room 
 {
     private String description;
-    private Room northExit;
-    private Room southExit;
-    private Room eastExit;
-    private Room westExit;
+    private HashMap<String, Room> exits;
 
     /**
      * Create a room described "description". Initially, it has
@@ -31,6 +28,7 @@ public class Room
     public Room(String description) 
     {
         this.description = description;
+        exits = new HashMap<>();
     }
 
     /**
@@ -41,20 +39,9 @@ public class Room
      * @param south The south exit.
      * @param west The west exit.
      */
-    public void setExits(Room north, Room east, Room south, Room west) 
+    public void setExits(String direction, Room neighbor) 
     {
-        if(north != null) {
-            northExit = north;
-        }
-        if(east != null) {
-            eastExit = east;
-        }
-        if(south != null) {
-            southExit = south;
-        }
-        if(west != null) {
-            westExit = west;
-        }
+        exits.put(direction, neighbor);
     }
 
     /**
@@ -67,22 +54,7 @@ public class Room
 
     public Room getExit(String direction)
     {
-        if(direction.equals("noord")) {
-            return northExit;
-        }
-        
-        if(direction.equals("oost")) {
-            return eastExit;
-        }
-        
-        if(direction.equals("zuid")) {
-            return southExit;
-        }
-        
-        if(direction.equals("west")) {
-            return westExit;
-        }
-        return null;
+        return exits.get(direction);
     }
     
     /**
@@ -93,22 +65,11 @@ public class Room
      */
     public String getExitString()
     {
-        String exits = "";
-        if(northExit != null) {
-            exits = exits + "♞noord♞ ";
+        String returnString = "Doorgangen:";
+        Set<String> keys = exits.keySet();
+        for(String exit : keys) {
+            returnString += " " + "♞" + exit + "♞";
         }
-        
-        if(eastExit != null) {
-            exits = exits + "♞oost♞ ";
-        }
-        
-        if(southExit != null) {
-            exits = exits + "♞zuid♞ ";
-        }
-        
-        if(westExit != null) {
-            exits = exits + "♞west♞ ";
-        }
-        return exits;
+        return returnString;
     }
 }
