@@ -13,7 +13,7 @@ public class CommandWords
 {
     // a constant array that holds all valid command words
     private static final String[] validCommands = {
-        "ga", "stop", "help"
+        "ga", "stop", "help", "kijk", "geef", "terug"
     };
 
     /**
@@ -24,6 +24,15 @@ public class CommandWords
         // nothing to do at the moment...
     }
 
+    public String getCommandList()
+    {
+        String commandwords = "";
+        for(String command : validCommands) {
+            commandwords += "✦" + command + "✦ ";
+        }
+        return commandwords;
+    }
+    
     /**
      * Check whether a given String is a valid command word. 
      * @return true if a given string is a valid command,

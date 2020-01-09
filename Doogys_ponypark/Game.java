@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -19,7 +21,9 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
-        
+    private ArrayList<Room> vorigeKamers;
+    private Player player;
+    private HashMap<String, Room> rooms;
     /**
      * Create the game and initialise its internal map.
      */
@@ -27,8 +31,15 @@ public class Game
     {
         createRooms();
         parser = new Parser();
+        vorigeKamers = new ArrayList<Room>();
+        rooms = new HashMap<String, Room>();
+        player = new Player();
     }
 
+    public HashMap<String, Room> test()
+    {
+        return rooms;
+    }
     /**
      * Create all the rooms and link their exits together.
      */
@@ -38,7 +49,7 @@ public class Game
       
         // create the rooms
         //beginruimte = new Room("Hier begin je");
-        plein = new Room("op het plijn");
+        plein =  new Room("op het plijn");
         doogy_dinner = new Room("in de ordinaire vreetschuur");
         doogy_kamer = new Room("in de kamer van Doogy");
         stal = new Room("in de stal met paarden");
@@ -61,6 +72,7 @@ public class Game
         doogy_kamer.setExits("noord", doogy_dinner);
         //stal.setExits(plein, null, null, null);
         stal.setExits("noord", plein);
+        stal.setItem(new Item("zadel"));
         //reuzeplein.setExits(straat, null, null, plein);
         reuzeplein.setExits("noord", straat);
         reuzeplein.setExits("west", plein);
@@ -70,16 +82,52 @@ public class Game
         straat.setExits("zuid", reuzeplein);
         //huis1.setExits(null, huis2, null, null);
         zolder.setExits("omlaag", huis2);
+        zolder.setItem(new Item("sleutel"));
         //huis2.setExits(null, null, straat, huis1);
         huis2.setExits("zuid", straat);
         huis2.setExits("omhoog", zolder);
         //huis3.setExits(null, null, null, straat);
         huis3.setExits("west", straat);
+        huis3.setItem(new Item("mes"));
         
 
-        currentRoom = plein;  // start game in beginruimte
+        player.setCurrentRoom(plein);
     }
 
+    private void look()
+    {
+        System.out.println(currentRoom.getLongDescription());
+    }
+    
+    private void vorigeKamerToevoegen()
+    {
+       vorigeKamers.add(currentRoom);
+    }
+    
+    private void terug()
+    {
+        if(vorigeKamers.isEmpty()) {
+            System.out.println("Je kunt niet verder terug");
+        } else if (vorigeKamers.size() >= 1){
+            currentRoom = vorigeKamers.get(vorigeKamers.size()-1);
+            vorigeKamers.remove(vorigeKamers.size()-1);
+            printLocationInfo();
+        } else {
+            System.out.println("");
+        }
+    }
+    
+    private void geef()
+    {
+        System.out.println("Je hebt niks gegeven want je bezit niks #skeer");
+    }
+    
+    public Room getCurrentRoom()
+    {
+        Room room = currentRoom;
+        return room;
+    }
+    
     /**
      *  Main play routine.  Loops until end of play.
      */
@@ -102,8 +150,8 @@ public class Game
    public void printLocationInfo()
    {
      
-       System.out.println("Je bent " + currentRoom.getDescription()); 
-       System.out.print(currentRoom.getExitString());
+       //System.out.println("Je bent " + currentRoom.getDescription()); 
+       System.out.print(currentRoom.getLongDescription());
        System.out.println();     
     }
 
@@ -140,10 +188,20 @@ public class Game
             printHelp();
         }
         else if (commandWord.equals("ga")) {
+            vorigeKamerToevoegen();
             goRoom(command);
         }
         else if (commandWord.equals("stop")) {
             wantToQuit = quit(command);
+        }
+        else if (commandWord.equals("kijk")) {
+            look();
+        }
+        else if (commandWord.equals("geef")) {
+            geef();
+        } 
+        else if (commandWord.equals("terug")) {
+            terug();
         }
 
         return wantToQuit;
@@ -158,11 +216,12 @@ public class Game
      */
     private void printHelp() 
     {
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
+        System.out.println();
+        System.out.println("Dit is ponypark slagharen mijn broeder");
+        System.out.println("Go ride or die");
         System.out.println();
         System.out.println("Your command words are:");
-        System.out.println("   go quit help");
+        System.out.println(parser.commandString());
     }
 
     /** 
