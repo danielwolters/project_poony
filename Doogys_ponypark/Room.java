@@ -20,6 +20,7 @@ public class Room
     private String description;
     private HashMap<String, Room> exits;
     private ArrayList<Item> item;
+    private boolean slot;
     /**
      * Create a room described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
@@ -31,6 +32,7 @@ public class Room
         this.description = description;
         item = new ArrayList<Item>();
         exits = new HashMap<>();
+        slot = false;
     }
 
     /**
@@ -46,9 +48,27 @@ public class Room
         exits.put(direction, neighbor);
     }
 
+    public void setSlot(boolean slot) {
+        this.slot=slot;
+    }
+    
+    public boolean getSlot() {
+        return slot;
+    }
+    
     public void setItem(Item item)
     {
         this.item.add(item);
+    }
+    
+    public ArrayList<Item> getRoomItem()
+    {
+        return item;
+    }
+    
+    public void removeItem()
+    {
+        item.remove(0);
     }
     
     /**
@@ -85,10 +105,10 @@ public class Room
         String kamerOmschrijving = "";
         kamerOmschrijving += "Je bent " + description + ".\n";
         if(!item.isEmpty()) {
-            kamerOmschrijving += "Er ligt hier (∩｀-´)⊃━━☆ﾟ.*･｡ﾟ ";
+            kamerOmschrijving += "Er ligt hier eeeeen (∩｀-´)⊃━━☆ﾟ.*･｡ﾟ";
             int index = 0;
             while (index < item.size()) {
-                kamerOmschrijving += "✔" + item.get(index).getOmschrijving() + "✔ ";
+                kamerOmschrijving += "ﾟ.*" + item.get(index).getOmschrijving() + "･｡ﾟ";
                 index++;
             }
             kamerOmschrijving += "\n";
