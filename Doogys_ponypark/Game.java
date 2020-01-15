@@ -226,9 +226,10 @@ public class Game
     }
     
     public void printAntwoorden() {
-        System.out.print(player.getCurrentRoom().getPersonage().getAntwoorden().get("A") + "\n");
-        System.out.print(player.getCurrentRoom().getPersonage().getAntwoorden().get("B") + "\n");
-        System.out.print(player.getCurrentRoom().getPersonage().getAntwoorden().get("C") + "\n");
+        System.out.println(player.getCurrentRoom().getPersonage().getOnderwerp() + "\n");
+        System.out.print("A: " + player.getCurrentRoom().getPersonage().getAntwoorden().get("A") + "\n");
+        System.out.print("B: " +player.getCurrentRoom().getPersonage().getAntwoorden().get("B") + "\n");
+        System.out.print("C: " +player.getCurrentRoom().getPersonage().getAntwoorden().get("C") + "\n");
     }
     
     /**
@@ -336,7 +337,10 @@ public class Game
             player.setCurrentRoom(nextRoom);
             printLocationInfo();
             System.out.println("Hallo ik ben " + nextRoom.getPersonage().getNaam() + " en ik ben " + nextRoom.getPersonage().getOmschrijving());
-            System.out.println("A : poep \n B: kaas \n C:helm");
+            nextRoom.getPersonage().setOnderwerp("Ik zit vast in het pretpark. \n Ik heb hier mijn eigen snackbar waar je veel verschillende soorten vlees kan eten. \n En wie ben jij? ");
+            nextRoom.getPersonage().getAntwoorden().put("A", "Ik ben Claudia de brij en zit ook vast in dit pretpark. Kan jij me helpen om de uitgang te vinden?");
+            nextRoom.getPersonage().getAntwoorden().put("B", "Dat zeg ik lekker niet");
+            nextRoom.getPersonage().getAntwoorden().put("C", "Gast wat lul jij. Egels kunnen helemaal niet praten");
             printAntwoorden();
             gesprek();
         }
