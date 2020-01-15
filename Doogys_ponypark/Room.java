@@ -20,6 +20,7 @@ public class Room
     private String description;
     private HashMap<String, Room> exits;
     private ArrayList<Item> item;
+    private Personage personage;
     private boolean slot;
     /**
      * Create a room described "description". Initially, it has
@@ -32,6 +33,7 @@ public class Room
         this.description = description;
         item = new ArrayList<Item>();
         exits = new HashMap<>();
+        personage = null;
         slot = false;
     }
 
@@ -48,6 +50,16 @@ public class Room
         exits.put(direction, neighbor);
     }
 
+    public void setPersonage(Personage personage)
+    {
+        this.personage = personage;
+    }
+    
+    public Personage getPersonage()
+    {
+        return personage;
+    }
+    
     public void setSlot(boolean slot) {
         this.slot=slot;
     }

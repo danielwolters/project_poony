@@ -50,7 +50,7 @@ public class Game
         huis2 = new Room("in huis 2 met een erg mooi schilderij aan de muur");
         huis3 = new Room("in huis 3, een erg dubieus huis hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm???");
 
-        // initialise room exits and item
+        // initialise room exits and items and personages and locks
         //plein
         plein.setExits("oost", reuzeplein);
         plein.setExits("zuid", stal);
@@ -62,6 +62,7 @@ public class Game
 
         //doogy_kamer
         doogy_kamer.setExits("noord", doogy_dinner);
+        doogy_kamer.setPersonage(new Personage("Doogy", "leuke egel"));
 
         //stal
         stal.setExits("noord", plein);
@@ -189,6 +190,47 @@ public class Game
         System.out.println();
     }
 
+    private void gesprek() {
+        boolean finished = false;
+        while (! finished) {
+            Command command = parser.getCommand();
+            finished = processGesprek(command);
+        }
+    }
+    
+    private boolean processGesprek(Command command)
+    {
+        boolean want_to_quit = false;
+        if(command.isUnknown()) {
+            System.out.println("Dit is geen command, probeer wat anders.");
+            return false;
+        }
+         String commandWord = command.getCommandWord();
+         if (commandWord.equals("A")) {
+            Personage doogy = player.getCurrentRoom().getPersonage();
+            doogy.fillAntwoorden(doogy.getAntwoorden().get("A"));
+        }
+        else if (commandWord.equals("B")) {
+            Personage doogy = player.getCurrentRoom().getPersonage();
+            doogy.fillAntwoorden(doogy.getAntwoorden().get("B"));
+        }
+        else if (commandWord.equals("C")) {
+            Personage doogy = player.getCurrentRoom().getPersonage();
+            doogy.fillAntwoorden(doogy.getAntwoorden().get("C"));
+        }
+        else if (commandWord.equals("stop")) {
+            return true;
+        }
+        printAntwoorden();
+        return want_to_quit;
+    }
+    
+    public void printAntwoorden() {
+        System.out.print(player.getCurrentRoom().getPersonage().getAntwoorden().get("A") + "\n");
+        System.out.print(player.getCurrentRoom().getPersonage().getAntwoorden().get("B") + "\n");
+        System.out.print(player.getCurrentRoom().getPersonage().getAntwoorden().get("C") + "\n");
+    }
+    
     /**
      * Given a command, process (that is: execute) the command.
      * @param command The command to be processed.
@@ -290,6 +332,13 @@ public class Game
         } else if(nextRoom.getSlot() == true) {
             System.out.println("Deze kamer zit opslot sorry pikkie");
             return;
+        } else if(nextRoom.getPersonage() != null) {
+            player.setCurrentRoom(nextRoom);
+            printLocationInfo();
+            System.out.println("Hallo ik ben " + nextRoom.getPersonage().getNaam() + " en ik ben " + nextRoom.getPersonage().getOmschrijving());
+            System.out.println("A : poep \n B: kaas \n C:helm");
+            printAntwoorden();
+            gesprek();
         }
         else{
             player.setCurrentRoom(nextRoom);
