@@ -193,45 +193,76 @@ public class Game
     private void gesprek() {
         boolean finished = false;
         while (! finished) {
-            Command command = parser.getCommand();
-            finished = processGesprek(command);
+            if(player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("Succes")) {
+                System.out.println("Heel fijn dat je er zo over denkt");
+                System.out.println("Kom mee naar het reuzenrad dat laat ik je mijn verrassing zien");
+                player.getCurrentRoom().setPersonage(new Personage("mooiman", "mooiman"));
+                player.setCurrentRoom(player.getCurrentRoom().getExit("noord").getExit("oost").getExit("oost"));
+                printLocationInfo();
+                System.out.println();
+                System.out.println("*Jullie stappen in het reuzenrad*");
+                System.out.println("Tijdens de slag om het welbefaamde ponypark, hebben de Romeinen de paardenstal ten zuide van het plijn erg veel gebruikt");
+                System.out.println("Men zegt dat daarginds een extra uitgang in het leven is geroepen om van de Grieken te ontsnappen");
+                System.out.println("Maar denk niet dat deze uitgang zomaar te betreden is");
+                System.out.println("Deze uitgang is slechts alleen met een paard te begaan");
+                System.out.println("Maar voor u zo'n trouwe viervoeter kunt overmeesteren moet u deze eerst bekleden met bijpassend gerij");
+                System.out.println("Voordat u dit gerij kunt bemachtigen zult u mij eerst een offer moeten brengen");
+                System.out.println("*Stapt uit reuzenrad*");
+                System.out.println("Mocht u dit offer toe-eigenen dan kunt u mij dit toe leveren in de snackbar");
+                player.getCurrentRoom().getExit("west").getExit("west").setPersonage(new Personage("Doogy", "leuke egel"));
+                finished = true;
+            } else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("Gefaald")) {
+                System.out.println("Gefaald");
+                player.setCurrentRoom(player.getCurrentRoom().getExit("noord"));
+                finished = true;
+            } else {
+                Command command = parser.getCommand();
+                finished = processGesprek(command);
+            }
         }
     }
-    
+
     private boolean processGesprek(Command command)
     {
         boolean want_to_quit = false;
+        Personage doogy = player.getCurrentRoom().getPersonage();
         if(command.isUnknown()) {
             System.out.println("Dit is geen command, probeer wat anders.");
             return false;
         }
-         String commandWord = command.getCommandWord();
-         if (commandWord.equals("A")) {
-            Personage doogy = player.getCurrentRoom().getPersonage();
+
+        String commandWord = command.getCommandWord();
+        if (commandWord.equals("A")) {
+            //Personage doogy = player.getCurrentRoom().getPersonage();
             doogy.fillAntwoorden(doogy.getAntwoorden().get("A"));
         }
         else if (commandWord.equals("B")) {
-            Personage doogy = player.getCurrentRoom().getPersonage();
+            //Personage doogy = player.getCurrentRoom().getPersonage();
             doogy.fillAntwoorden(doogy.getAntwoorden().get("B"));
         }
         else if (commandWord.equals("C")) {
-            Personage doogy = player.getCurrentRoom().getPersonage();
+            //Personage doogy = player.getCurrentRoom().getPersonage();
             doogy.fillAntwoorden(doogy.getAntwoorden().get("C"));
         }
         else if (commandWord.equals("stop")) {
             return true;
         }
-        printAntwoorden();
+
+        if(doogy.getAntwoorden().get("A").equals("Succes") || doogy.getAntwoorden().get("A").equals("Gefaald")) {
+            return false;
+        } else {
+            printAntwoorden();
+        }
         return want_to_quit;
     }
-    
+
     public void printAntwoorden() {
         System.out.println(player.getCurrentRoom().getPersonage().getOnderwerp() + "\n");
         System.out.print("A: " + player.getCurrentRoom().getPersonage().getAntwoorden().get("A") + "\n");
         System.out.print("B: " +player.getCurrentRoom().getPersonage().getAntwoorden().get("B") + "\n");
         System.out.print("C: " +player.getCurrentRoom().getPersonage().getAntwoorden().get("C") + "\n");
     }
-    
+
     /**
      * Given a command, process (that is: execute) the command.
      * @param command The command to be processed.
@@ -334,15 +365,17 @@ public class Game
             System.out.println("Deze kamer zit opslot sorry pikkie");
             return;
         } else if(nextRoom.getPersonage() != null) {
-            player.setCurrentRoom(nextRoom);
-            printLocationInfo();
-            System.out.println("Hallo ik ben " + nextRoom.getPersonage().getNaam() + " en ik ben " + nextRoom.getPersonage().getOmschrijving());
-            nextRoom.getPersonage().setOnderwerp("Ik zit vast in het pretpark. \n Ik heb hier mijn eigen snackbar waar je veel verschillende soorten vlees kan eten. \n En wie ben jij? ");
-            nextRoom.getPersonage().getAntwoorden().put("A", "Ik ben Claudia de brij en zit ook vast in dit pretpark. Kan jij me helpen om de uitgang te vinden?");
-            nextRoom.getPersonage().getAntwoorden().put("B", "Dat zeg ik lekker niet");
-            nextRoom.getPersonage().getAntwoorden().put("C", "Gast wat lul jij. Egels kunnen helemaal niet praten");
-            printAntwoorden();
-            gesprek();
+            if(nextRoom.getPersonage().getNaam().equals("Doogy")) {
+                player.setCurrentRoom(nextRoom);
+                printLocationInfo();
+                System.out.println("Hallo ik ben " + nextRoom.getPersonage().getNaam() + " en ik ben " + nextRoom.getPersonage().getOmschrijving());
+                nextRoom.getPersonage().setOnderwerp("Ik zit vast in het pretpark. \n Ik heb hier mijn eigen snackbar waar je veel verschillende soorten vlees kan eten. \n En wie ben jij? ");
+                nextRoom.getPersonage().getAntwoorden().put("A", "Ik ben Claudia de brij en zit ook vast in dit pretpark. Kan jij me helpen om de uitgang te vinden?");
+                nextRoom.getPersonage().getAntwoorden().put("B", "Dat zeg ik lekker niet");
+                nextRoom.getPersonage().getAntwoorden().put("C", "Gast wat lul jij. Egels kunnen helemaal niet praten");
+                printAntwoorden();
+                gesprek();
+            }
         }
         else{
             player.setCurrentRoom(nextRoom);
