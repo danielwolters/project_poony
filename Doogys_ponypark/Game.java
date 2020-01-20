@@ -66,9 +66,10 @@ public class Game
 
         //stal
         stal.setExits("noord", plein);
-        stal.setItem(new Item("zadel"));
+        //stal.setItem(new Item("zadel"));
         stal.setSlot(true);
-
+        stal.setPersonage(new Personage("Henry", "paard dat doodgaat"));
+        
         //reuzeplein
         reuzeplein.setExits("noord", straat);
         reuzeplein.setExits("west", plein);
@@ -218,7 +219,7 @@ public class Game
                 System.out.println("*Stapt uit reuzenrad*");
                 
                 System.out.println();
-                System.out.println("Mocht u dit offer toe-eigenen dan kunt u mij dit toe leveren in de snackbar");
+                System.out.println("Mocht u dit offer toe-eigenen dan kunt u mij dit toe leveren in de snackbar\n Paardenvlees is mijn favoriet(*knipoog*)");
                 System.out.println("*Doogy loopt naar de ordinaire vreetschuur*");
                 
                 System.out.println();
@@ -227,7 +228,7 @@ public class Game
                 player.getVorigeKamers().clear();
                 finished = true;
             } else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("Gefaald")) {
-                System.out.println("*Doogy heeft je de kamer uitgezet omdat je niet het gewenste antwoord gaf*");
+                System.out.println("*" + player.getCurrentRoom().getPersonage().getNaam() + " heeft je er uitgezet omdat je niet het gewenste antwoord gaf*");
                 
                 player.setCurrentRoom(player.getCurrentRoom().getExit("noord"));
                 printLocationInfo();
@@ -404,6 +405,18 @@ public class Game
                 printLocationInfo();
                 System.out.println();
                 System.out.println("Hallo ik ben " + nextRoom.getPersonage().getNaam() + " en ik ben " + nextRoom.getPersonage().getOmschrijving());
+            }
+            else if(nextRoom.getPersonage().getNaam().equals("Henry")) {
+                player.setCurrentRoom(nextRoom);
+                printLocationInfo();
+                System.out.println();
+                System.out.println("*Hinnik* *Hinnik*");
+                nextRoom.getPersonage().setOnderwerp("Hallo daar vreemdeling. Ik ben Henry het pratende paard.\nKan ik jou misschien ergens mee helpen?");
+                nextRoom.getPersonage().getAntwoorden().put("A", "Ja! Kan je me vertellen of hier een uitgang is?");
+                nextRoom.getPersonage().getAntwoorden().put("B", "Je stinkt");
+                nextRoom.getPersonage().getAntwoorden().put("C", "Gast wat lul jij. Paarden kunnen helemaal niet praten");
+                printAntwoorden();
+                gesprek();
             }
         }
             
