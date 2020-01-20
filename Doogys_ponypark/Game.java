@@ -224,6 +224,7 @@ public class Game
                 System.out.println();
                 printLocationInfo();
                 player.getCurrentRoom().getExit("west").getExit("west").setPersonage(new Personage("Doogy", "leuke egel"));
+                player.getVorigeKamers().clear();
                 finished = true;
             } else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("Gefaald")) {
                 System.out.println("*Doogy heeft je de kamer uitgezet omdat je niet het gewenste antwoord gaf*");
@@ -244,7 +245,7 @@ public class Game
         boolean want_to_quit = false;
         Personage doogy = player.getCurrentRoom().getPersonage();
         if(command.isUnknown()) {
-            System.out.println("Dit is geen command, probeer wat anders.");
+            System.out.println("Beantwoord mijn vraag broeder");
             return false;
         }
 
@@ -261,8 +262,10 @@ public class Game
             //Personage doogy = player.getCurrentRoom().getPersonage();
             doogy.fillAntwoorden(doogy.getAntwoorden().get("C"));
         }
-        else if (commandWord.equals("stop")) {
-            return true;
+        else if (commandWord.equals("ga") || commandWord.equals("stop") || commandWord.equals("help") || commandWord.equals("kijk") || commandWord.equals("geef") || commandWord.equals("terug") ||
+        commandWord.equals("pak") || commandWord.equals("wegdoen") || commandWord.equals("inhoud") || commandWord.equals("gebruik")){
+            System.out.println("Beantwoord mijn vraag broeder");
+            return false;
         }
 
         if(doogy.getAntwoorden().get("A").equals("Succes") || doogy.getAntwoorden().get("A").equals("Gefaald")) {
@@ -340,7 +343,7 @@ public class Game
     {
         System.out.println();
         System.out.println("Dit is ponypark slagharen mijn broeder");
-        System.out.println("Go ride or die");
+        //System.out.println("Go ride or die");
         System.out.println();
         System.out.println("De woorden die je kunt gebruiken zijn:");
         System.out.println(parser.commandString());
@@ -387,9 +390,9 @@ public class Game
                 printLocationInfo();
                 System.out.println();
                 //System.out.println("Hallo ik ben " + nextRoom.getPersonage().getNaam() + " en ik ben een" + nextRoom.getPersonage().getOmschrijving());
-                System.out.println("Oh, Hallo \nBen jij een verdwaalde bezoeker? Ik heb hier in jaren al niemand meer gezien.");
+                System.out.println("Oh, Hallo...\nIk ben Doogy de egel. \nBen jij een verdwaalde bezoeker? Ik heb hier in jaren al niemand meer gezien.");
                 nextRoom.getPersonage().setOnderwerp("Inmiddels zit ik hier al zo lang vast dat ik mijn eigen snackbar ben begonnen waar je veel verschillende soorten vlees kan eten." + 
-                "\nEn aan wie heb ik dit bezoek te danken?");
+                "\nJe bent er al langs gekomen, hij heet de ordinaire vreetschuur. \nEn aan wie heb ik dit bezoek te danken?");
                 nextRoom.getPersonage().getAntwoorden().put("A", "Ik ben Claudia de brij en zit ook vast in dit pretpark. Kan jij me helpen om de uitgang te vinden?");
                 nextRoom.getPersonage().getAntwoorden().put("B", "Dat zeg ik lekker niet");
                 nextRoom.getPersonage().getAntwoorden().put("C", "Gast wat lul jij. Egels kunnen helemaal niet praten");
