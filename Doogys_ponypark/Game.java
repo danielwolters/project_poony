@@ -69,7 +69,7 @@ public class Game
         //stal.setItem(new Item("zadel"));
         stal.setSlot(true);
         stal.setPersonage(new Personage("Henry", "paard dat doodgaat"));
-        
+
         //reuzeplein
         reuzeplein.setExits("noord", straat);
         reuzeplein.setExits("west", plein);
@@ -145,8 +145,21 @@ public class Game
                 nextRoom.setSlot(false);
                 System.out.println("De stal is geopend");
                 player.getGoodieBagga().remove(0);
+            } else if(player.getCurrentRoom().getDescription().equals("in de stal met paarden") && player.getGoodieBaggaString().equals("mes")) {
+                player.getGoodieBagga().remove(0);
+                player.getGoodieBagga().add(new Item("paardenvlees"));
+                System.out.println("Je zwaait je mes in het rond en raakt de slagader van een trouwe viervoeter naast je");
+                System.out.println("Het arme beestje hinnikt nog een paar keer voor het zijn laatste stapjes zet en valt dan ten gronde");
+                System.out.println("Al kijkend in de ogen van het beestje zie je zijn ziel langzaam heengaan");
+                System.out.println("Alle andere paarden kijken je geschokt aan terwijl je alleen maar aan het offer kan denken");
+                System.out.println("De slag is geslagen, het beest is geveld...");
+                System.out.println("Langzaam, maar zeker van je zaak snij je een stuk vlees uit het inmiddels levenloze lichaam");
+                System.out.println("Henry lacht op de achtergrond en zegt:'Dat was toch altijd al een kut beest'");
+                System.out.println();
+                System.out.println();
+                System.out.println("*paardenvlees opgepakt*");
             } else {
-                System.out.println("niet hallp");
+                System.out.println("Er is hier niks om een actie uit te voeren");
             }
         }
     }
@@ -198,14 +211,14 @@ public class Game
                 System.out.println("Heel fijn dat je er zo over denkt");
                 System.out.println("Kom mee naar het reuzenrad dat laat ik je mijn verrassing zien!");
                 System.out.println("*Jullie lopen naar het plein met het reuzenrad*");
-                
+
                 player.getCurrentRoom().setPersonage(null);
                 player.setCurrentRoom(player.getCurrentRoom().getExit("noord").getExit("oost").getExit("oost"));
-                                
+
                 System.out.println();
                 System.out.println("*Jullie stappen in het reuzenrad*");
                 System.out.println();
-                
+
                 System.out.println("Laat me jou eens wat vertellen:");
                 System.out.println("Tijdens de slag om het welbefaamde ponypark, hebben de Romeinen de paardenstal ten zuide van het plijn erg veel gebruikt.");
                 System.out.println("Men zegt dat daarginds een extra uitgang in het leven is geroepen om van de Grieken te ontsnappen.");
@@ -217,11 +230,11 @@ public class Game
                 System.out.println();
 
                 System.out.println("*Stapt uit reuzenrad*");
-                
+
                 System.out.println();
                 System.out.println("Mocht u dit offer toe-eigenen dan kunt u mij dit toe leveren in de snackbar\n Paardenvlees is mijn favoriet(*knipoog*)");
                 System.out.println("*Doogy loopt naar de ordinaire vreetschuur*");
-                
+
                 System.out.println();
                 printLocationInfo();
                 player.getCurrentRoom().getExit("west").getExit("west").setPersonage(new Personage("Doogy", "leuke egel"));
@@ -229,12 +242,12 @@ public class Game
                 finished = true;
             } else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("Gefaald")) {
                 System.out.println("*" + player.getCurrentRoom().getPersonage().getNaam() + " heeft je er uitgezet omdat je niet het gewenste antwoord gaf*");
-                
+
                 player.setCurrentRoom(player.getCurrentRoom().getExit("noord"));
                 printLocationInfo();
                 finished = true;
             } else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("checkzadel")){
-                
+
                 if(!player.getGoodieBagga().isEmpty()&&player.getGoodieBaggaString().equals("zadel")){
                     System.out.println("Waar wacht je nog op? Gebruik het zadel en we gaan!");
                 }
@@ -243,13 +256,13 @@ public class Game
                 }
                 finished = true;
             }
-            
+
             else {
                 Command command = parser.getCommand();
                 finished = processGesprek(command);
             }
         }
-        
+
     }
 
     private boolean processGesprek(Command command)
@@ -275,9 +288,27 @@ public class Game
             poppetje.fillAntwoorden(poppetje.getAntwoorden().get("C"));
         }
         else if (commandWord.equals("ga") || commandWord.equals("stop") || commandWord.equals("help") || commandWord.equals("kijk") || commandWord.equals("geef") || commandWord.equals("terug") ||
-        commandWord.equals("pak") || commandWord.equals("wegdoen") || commandWord.equals("inhoud") || commandWord.equals("gebruik")){
+        commandWord.equals("pak") || commandWord.equals("wegdoen") || commandWord.equals("inhoud")){
             System.out.println("Beantwoord mijn vraag broeder");
             return false;
+        } else if (commandWord.equals("gebruik")) {
+            if(player.getCurrentRoom().getDescription().equals("in de stal met paarden")) {
+                if(player.validGoodieBagga()) {
+                    if(player.getGoodieBagga().get(0).getOmschrijving().equals("mes")) {
+                        gebruik();
+                        return true;
+                    } else {
+                        System.out.println("Beantwoord mijn vraag broeder");
+                        return false;
+                    }
+                } else {
+                    System.out.println("Beantwoord mijn vraag broeder");
+                    return false;
+                }
+            } else {
+                System.out.println("Beantwoord mijn vraag broeder");
+                return false;
+            }
         }
 
         if(poppetje.getAntwoorden().get("A").equals("Succes") || poppetje.getAntwoorden().get("A").equals("Gefaald") || poppetje.getAntwoorden().get("A").equals("checkzadel"))  {
@@ -404,7 +435,7 @@ public class Game
                 //System.out.println("Hallo ik ben " + nextRoom.getPersonage().getNaam() + " en ik ben een" + nextRoom.getPersonage().getOmschrijving());
                 System.out.println("Oh, Hallo...\nIk ben Doogy de egel. \nBen jij een verdwaalde bezoeker? Ik heb hier in jaren al niemand meer gezien.");
                 nextRoom.getPersonage().setOnderwerp("Inmiddels zit ik hier al zo lang vast dat ik mijn eigen snackbar ben begonnen waar je veel verschillende soorten vlees kan eten." + 
-                "\nJe bent er al langs gekomen, hij heet de ordinaire vreetschuur. \nEn aan wie heb ik dit bezoek te danken?");
+                    "\nJe bent er al langs gekomen, hij heet de ordinaire vreetschuur. \nEn aan wie heb ik dit bezoek te danken?");
                 nextRoom.getPersonage().getAntwoorden().put("A", "Ik ben Claudia de brij en zit ook vast in dit pretpark. Kan jij me helpen om de uitgang te vinden?");
                 nextRoom.getPersonage().getAntwoorden().put("B", "Dat zeg ik lekker niet");
                 nextRoom.getPersonage().getAntwoorden().put("C", "Gast wat lul jij. Egels kunnen helemaal niet praten");
@@ -430,7 +461,7 @@ public class Game
                 gesprek();
             }
         }
-            
+
         else{
             player.setCurrentRoom(nextRoom);
             printLocationInfo();
