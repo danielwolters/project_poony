@@ -143,7 +143,7 @@ public class Game
             if(player.getCurrentRoom().getDescription().equals("op het plijn") && player.getGoodieBaggaString().equals("sleutel")) {
                 Room nextRoom = player.getCurrentRoom().getExit("zuid");
                 nextRoom.setSlot(false);
-                System.out.println("De kamer is geopend");
+                System.out.println("De stal is geopend");
                 player.getGoodieBagga().remove(0);
             } else {
                 System.out.println("niet hallp");
@@ -233,7 +233,18 @@ public class Game
                 player.setCurrentRoom(player.getCurrentRoom().getExit("noord"));
                 printLocationInfo();
                 finished = true;
-            } else {
+            } else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("checkzadel")){
+                
+                if(!player.getGoodieBagga().isEmpty()&&player.getGoodieBaggaString().equals("zadel")){
+                    System.out.println("Waar wacht je nog op? Gebruik het zadel en we gaan!");
+                }
+                else {
+                    System.out.println("Vind eerst het zadel en kom dan terug.");
+                }
+                finished = true;
+            }
+            
+            else {
                 Command command = parser.getCommand();
                 finished = processGesprek(command);
             }
@@ -244,7 +255,7 @@ public class Game
     private boolean processGesprek(Command command)
     {
         boolean want_to_quit = false;
-        Personage doogy = player.getCurrentRoom().getPersonage();
+        Personage poppetje = player.getCurrentRoom().getPersonage();
         if(command.isUnknown()) {
             System.out.println("Beantwoord mijn vraag broeder");
             return false;
@@ -253,15 +264,15 @@ public class Game
         String commandWord = command.getCommandWord();
         if (commandWord.equals("A")) {
             //Personage doogy = player.getCurrentRoom().getPersonage();
-            doogy.fillAntwoorden(doogy.getAntwoorden().get("A"));
+            poppetje.fillAntwoorden(poppetje.getAntwoorden().get("A"));
         }
         else if (commandWord.equals("B")) {
             //Personage doogy = player.getCurrentRoom().getPersonage();
-            doogy.fillAntwoorden(doogy.getAntwoorden().get("B"));
+            poppetje.fillAntwoorden(poppetje.getAntwoorden().get("B"));
         }
         else if (commandWord.equals("C")) {
             //Personage doogy = player.getCurrentRoom().getPersonage();
-            doogy.fillAntwoorden(doogy.getAntwoorden().get("C"));
+            poppetje.fillAntwoorden(poppetje.getAntwoorden().get("C"));
         }
         else if (commandWord.equals("ga") || commandWord.equals("stop") || commandWord.equals("help") || commandWord.equals("kijk") || commandWord.equals("geef") || commandWord.equals("terug") ||
         commandWord.equals("pak") || commandWord.equals("wegdoen") || commandWord.equals("inhoud") || commandWord.equals("gebruik")){
@@ -269,7 +280,7 @@ public class Game
             return false;
         }
 
-        if(doogy.getAntwoorden().get("A").equals("Succes") || doogy.getAntwoorden().get("A").equals("Gefaald")) {
+        if(poppetje.getAntwoorden().get("A").equals("Succes") || poppetje.getAntwoorden().get("A").equals("Gefaald") || poppetje.getAntwoorden().get("A").equals("checkzadel"))  {
             return false;
         } else {
             printAntwoorden();
