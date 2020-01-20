@@ -195,31 +195,48 @@ public class Game
         while (! finished) {
             if(player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("Succes")) {
                 System.out.println("Heel fijn dat je er zo over denkt");
-                System.out.println("Kom mee naar het reuzenrad dat laat ik je mijn verrassing zien");
-                player.getCurrentRoom().setPersonage(new Personage("mooiman", "mooiman"));
+                System.out.println("Kom mee naar het reuzenrad dat laat ik je mijn verrassing zien!");
+                System.out.println("*Jullie lopen naar het plein met het reuzenrad*");
+                
+                player.getCurrentRoom().setPersonage(null);
                 player.setCurrentRoom(player.getCurrentRoom().getExit("noord").getExit("oost").getExit("oost"));
-                printLocationInfo();
+                                
                 System.out.println();
                 System.out.println("*Jullie stappen in het reuzenrad*");
-                System.out.println("Tijdens de slag om het welbefaamde ponypark, hebben de Romeinen de paardenstal ten zuide van het plijn erg veel gebruikt");
-                System.out.println("Men zegt dat daarginds een extra uitgang in het leven is geroepen om van de Grieken te ontsnappen");
-                System.out.println("Maar denk niet dat deze uitgang zomaar te betreden is");
-                System.out.println("Deze uitgang is slechts alleen met een paard te begaan");
-                System.out.println("Maar voor u zo'n trouwe viervoeter kunt overmeesteren moet u deze eerst bekleden met bijpassend gerij");
-                System.out.println("Voordat u dit gerij kunt bemachtigen zult u mij eerst een offer moeten brengen");
+                System.out.println();
+                
+                System.out.println("Laat me jou eens wat vertellen:");
+                System.out.println("Tijdens de slag om het welbefaamde ponypark, hebben de Romeinen de paardenstal ten zuide van het plijn erg veel gebruikt.");
+                System.out.println("Men zegt dat daarginds een extra uitgang in het leven is geroepen om van de Grieken te ontsnappen.");
+                System.out.println();
+                System.out.println("Maar denk niet dat deze uitgang zomaar te betreden is. Deze uitgang is slechts alleen");
+                System.out.println("met een paard te begaan. Maar voor u zo'n trouwe viervoeter kunt overmeesteren moet");
+                System.out.println("u deze eerst bekleden met bijpassend gerij. Voordat u dit gerij kunt bemachtigen");
+                System.out.println("zult u mij eerst een offer moeten brengen.");
+                System.out.println();
+
                 System.out.println("*Stapt uit reuzenrad*");
+                
+                System.out.println();
                 System.out.println("Mocht u dit offer toe-eigenen dan kunt u mij dit toe leveren in de snackbar");
+                System.out.println("*Doogy loopt naar de ordinaire vreetschuur*");
+                
+                System.out.println();
+                printLocationInfo();
                 player.getCurrentRoom().getExit("west").getExit("west").setPersonage(new Personage("Doogy", "leuke egel"));
                 finished = true;
             } else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("Gefaald")) {
-                System.out.println("Gefaald");
+                System.out.println("*Doogy heeft je de kamer uitgezet omdat je niet het gewenste antwoord gaf*");
+                
                 player.setCurrentRoom(player.getCurrentRoom().getExit("noord"));
+                printLocationInfo();
                 finished = true;
             } else {
                 Command command = parser.getCommand();
                 finished = processGesprek(command);
             }
         }
+        
     }
 
     private boolean processGesprek(Command command)
@@ -365,18 +382,28 @@ public class Game
             System.out.println("Deze kamer zit opslot sorry pikkie");
             return;
         } else if(nextRoom.getPersonage() != null) {
-            if(nextRoom.getPersonage().getNaam().equals("Doogy")) {
+            if(nextRoom.getPersonage().getNaam().equals("Doogy")&& nextRoom.getDescription().equals("in de kamer van Doogy")) {
                 player.setCurrentRoom(nextRoom);
                 printLocationInfo();
-                System.out.println("Hallo ik ben " + nextRoom.getPersonage().getNaam() + " en ik ben " + nextRoom.getPersonage().getOmschrijving());
-                nextRoom.getPersonage().setOnderwerp("Ik zit vast in het pretpark. \n Ik heb hier mijn eigen snackbar waar je veel verschillende soorten vlees kan eten. \n En wie ben jij? ");
+                System.out.println();
+                //System.out.println("Hallo ik ben " + nextRoom.getPersonage().getNaam() + " en ik ben een" + nextRoom.getPersonage().getOmschrijving());
+                System.out.println("Oh, Hallo \nBen jij een verdwaalde bezoeker? Ik heb hier in jaren al niemand meer gezien.");
+                nextRoom.getPersonage().setOnderwerp("Inmiddels zit ik hier al zo lang vast dat ik mijn eigen snackbar ben begonnen waar je veel verschillende soorten vlees kan eten." + 
+                "\nEn aan wie heb ik dit bezoek te danken?");
                 nextRoom.getPersonage().getAntwoorden().put("A", "Ik ben Claudia de brij en zit ook vast in dit pretpark. Kan jij me helpen om de uitgang te vinden?");
                 nextRoom.getPersonage().getAntwoorden().put("B", "Dat zeg ik lekker niet");
                 nextRoom.getPersonage().getAntwoorden().put("C", "Gast wat lul jij. Egels kunnen helemaal niet praten");
                 printAntwoorden();
                 gesprek();
             }
+            else if (nextRoom.getPersonage().getNaam().equals("Doogy")&& nextRoom.getDescription().equals("in de ordinaire vreetschuur")){
+                player.setCurrentRoom(nextRoom);
+                printLocationInfo();
+                System.out.println();
+                System.out.println("Hallo ik ben " + nextRoom.getPersonage().getNaam() + " en ik ben " + nextRoom.getPersonage().getOmschrijving());
+            }
         }
+            
         else{
             player.setCurrentRoom(nextRoom);
             printLocationInfo();
