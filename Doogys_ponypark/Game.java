@@ -21,7 +21,7 @@ public class Game
 {
     private Parser parser;
     private Player player;
-
+    private boolean uitgespeeld;
     /**
      * Create the game and initialise its internal map.
      */
@@ -30,6 +30,7 @@ public class Game
         player = new Player();
         createRooms();
         parser = new Parser();
+        uitgespeeld = false;
     }
 
     /**
@@ -46,7 +47,7 @@ public class Game
         stal = new Room("in de stal met paarden");
         reuzeplein = new Room("op het plein met een reuzenrad");
         straat = new Room("in een straat met 2 huizen");
-        zolder = new Room("zolder het ruikt alof er hier iets verborgen ligt");
+        zolder = new Room("op zolder, het ruikt alsof er hier iets verborgen ligt");
         huis2 = new Room("in huis 2 met een erg mooi schilderij aan de muur");
         huis3 = new Room("in huis 3, een erg dubieus huis hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm???");
 
@@ -124,6 +125,10 @@ public class Game
             player.addItem(player.getCurrentRoom().getRoomItem().get(0));
         }
     }
+    
+    private void uitgespeeld(){
+        uitgespeeld = true;
+    }
 
     private void wegdoen()
     {
@@ -178,9 +183,12 @@ public class Game
         while (! finished) {
             Command command = parser.getCommand();
             finished = processCommand(command);
+            finished = uitgespeeld;
         }
-        System.out.println("Thank you for playing.  Good bye.");
+        System.out.println("Bedankt voor het spelen, tot snel!");
     }
+    
+    
 
     public void printLocationInfo()
     {
@@ -206,6 +214,7 @@ public class Game
 
     private void gesprek() {
         boolean finished = false;
+        boolean klaar = false;
         while (! finished) {
             if(player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("Succes")) {
                 System.out.println("Heel fijn dat je er zo over denkt");
@@ -249,12 +258,26 @@ public class Game
             } else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("checkzadel")){
 
                 if(!player.getGoodieBagga().isEmpty()&&player.getGoodieBaggaString().equals("zadel")){
-                    System.out.println("Waar wacht je nog op? Gebruik het zadel en we gaan!");
+                    System.out.println("Henry en jij rijden samen naar de uitgang\nVoor jullie ligt niks anders dan een uitgestrekte horizon");
+                    System.out.println("Verdwaald in je gedachten denk je na over de avonturen die je hebt beleefd");
+                    System.out.println("Al achterom kijkend wordt Ponypark Slagharen steeds kleiner");
+                    System.out.println("Tranen sijpelen langzaam naar beneden als je nog  één keer terug denkt aan arme Doogy.");
+                    System.out.println("Er is geen tijd om na te denken over het verleden. Je richt je blik naar voren en zegt tegen jezelf");
+                    System.out.println("'het is tijd om na te gaan denken over de toekomst'");
+                    System.out.println();
+                    System.out.println("Plots schrik je wakker en ruikt de geur van vergebakken broodjes.");
+                    System.out.println("Je moeder staat in je kamer en vraagt of je zin hebt in ontbijt");
+                    System.out.println("Je realiseert je dat het allemaal een droom was en je loopt naar beneden om te gaan ontbijten");
+                    System.out.println("Waneer je gaat zitten aan de keuekntafel zegt je moeder : 'Ik heb je favoriete eten klaargemaakt, paardenvlees!'");
+                    finished = true;
+                    klaar = true;
+                    
                 }
                 else {
                     System.out.println("Vind eerst het zadel en kom dan terug.");
+                    finished = true;
                 }
-                finished = true;
+                
             } else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("snackie")){
                 System.out.println("* Je verlaat de kamer met een rond buikje en een snackie *");
                 player.setCurrentRoom(player.getCurrentRoom().getExit("oost"));
@@ -277,16 +300,19 @@ public class Game
                     printLocationInfo();
                     finished = true;
                 } 
-            } else if (!player.getGoodieBagga().isEmpty()&&player.getGoodieBaggaString().equals("hintje")) {
-                System.out.println("De snack van de dag is gemaakt van paard");
-                player.setCurrentRoom(player.getCurrentRoom().getExit("oost"));
-                printLocationInfo();
+            } else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("hintje")) {
+                System.out.println("De snack van de dag is gemaakt van paard\nFijne dag verder");
+                
                 finished = true;
             }
             else {
                 Command command = parser.getCommand();
                 finished = processGesprek(command);
             }
+        }
+        
+        if(klaar == true){
+            uitgespeeld();
         }
 
     }
@@ -377,6 +403,7 @@ public class Game
         }
         else if (commandWord.equals("stop")) {
             wantToQuit = quit(command);
+            
         }
         else if (commandWord.equals("kijk")) {
             look();
@@ -510,11 +537,13 @@ public class Game
     private boolean quit(Command command) 
     {
         if(command.hasSecondWord()) {
-            System.out.println("Quit what?");
+            System.out.println("Wat wil je stoppen?");
             return false;
         }
         else {
+            
             return true;  // signal that we want to quit
+            
         }
     }
 }
