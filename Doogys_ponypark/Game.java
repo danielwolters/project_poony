@@ -229,7 +229,7 @@ public class Game
                 System.out.println("zult u mij eerst een offer moeten brengen.");
                 System.out.println();
 
-                System.out.println("*Stapt uit reuzenrad*");
+                System.out.println("*Jullie stappen uit het reuzenrad*");
 
                 System.out.println();
                 System.out.println("Mocht u dit offer toe-eigenen dan kunt u mij dit toe leveren in de snackbar\n Paardenvlees is mijn favoriet(*knipoog*)");
@@ -255,8 +255,34 @@ public class Game
                     System.out.println("Vind eerst het zadel en kom dan terug.");
                 }
                 finished = true;
+            } else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("snackie")){
+                System.out.println("* Je verlaat de kamer met een rond buikje en een snackie *");
+                player.setCurrentRoom(player.getCurrentRoom().getExit("oost"));
+                printLocationInfo();
+                finished = true;
             }
-
+            else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("checkoffer")){
+                if(!player.getGoodieBagga().isEmpty()&&player.getGoodieBaggaString().equals("paardenvlees")){
+                    System.out.println("Bedankt voor dit malse offer, ik ga er wat lekkers van maken");
+                    System.out.println("Als dank voor dit offer krijg je van mij dit speciale gerij");
+                    System.out.println("*paardenvlees gegeven*");
+                    player.getGoodieBagga().remove(0);
+                    System.out.println("*zadel ontvangen*");
+                    player.getGoodieBagga().add(new Item("zadel"));
+                    finished = true;
+                } else {
+                    
+                    System.out.println("*Doogy is boos aangezien je het offer niet hebt en heeft je de kamer uitgezet*");
+                    player.setCurrentRoom(player.getCurrentRoom().getExit("oost"));
+                    printLocationInfo();
+                    finished = true;
+                } 
+            } else if (!player.getGoodieBagga().isEmpty()&&player.getGoodieBaggaString().equals("hintje")) {
+                System.out.println("De snack van de dag is gemaakt van paard");
+                player.setCurrentRoom(player.getCurrentRoom().getExit("oost"));
+                printLocationInfo();
+                finished = true;
+            }
             else {
                 Command command = parser.getCommand();
                 finished = processGesprek(command);
@@ -311,9 +337,10 @@ public class Game
             }
         }
 
-        if(poppetje.getAntwoorden().get("A").equals("Succes") || poppetje.getAntwoorden().get("A").equals("Gefaald") || poppetje.getAntwoorden().get("A").equals("checkzadel"))  {
+        if(poppetje.getAntwoorden().get("A").equals("Succes") || poppetje.getAntwoorden().get("A").equals("Gefaald") || poppetje.getAntwoorden().get("A").equals("checkzadel")||
+        poppetje.getAntwoorden().get("A").equals("checkoffer")||poppetje.getAntwoorden().get("A").equals("hintje")||poppetje.getAntwoorden().get("A").equals("snackie"))  {
             return false;
-        } else {
+        } else { 
             printAntwoorden();
         }
         return want_to_quit;
@@ -446,7 +473,13 @@ public class Game
                 player.setCurrentRoom(nextRoom);
                 printLocationInfo();
                 System.out.println();
-                System.out.println("Hallo ik ben " + nextRoom.getPersonage().getNaam() + " en ik ben " + nextRoom.getPersonage().getOmschrijving());
+                System.out.println("Oh, daar ben je weer!\nWat ben ik blij om jou te zien!");
+                nextRoom.getPersonage().setOnderwerp("Heb je toevallig waar ik om heb gevraagd?");
+                nextRoom.getPersonage().getAntwoorden().put("A", "Nee maar ik lust wel een lekker snackie");
+                nextRoom.getPersonage().getAntwoorden().put("B", "Ja ik denk het wel");
+                nextRoom.getPersonage().getAntwoorden().put("C", "Nee, kan je me een hintje geven?");
+                printAntwoorden();
+                gesprek();
             }
             else if(nextRoom.getPersonage().getNaam().equals("Henry")) {
                 player.setCurrentRoom(nextRoom);
