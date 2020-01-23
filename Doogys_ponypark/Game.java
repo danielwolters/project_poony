@@ -1,10 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 /**
- *  This class is the main class of the "World of Zuul" application. 
- *  "World of Zuul" is a very simple, text based adventure game.  Users 
- *  can walk around some scenery. That's all. It should really be extended 
- *  to make it more interesting!
+ *  This class is the main class of the "Ponypark Slagharen" application. 
  * 
  *  To play this game, create an instance of this class and call the "play"
  *  method.
@@ -13,8 +10,8 @@ import java.util.HashMap;
  *  rooms, creates the parser and starts the game.  It also evaluates and
  *  executes the commands that the parser returns.
  * 
- * @author  Michael Kölling and David J. Barnes
- * @version 2016.02.29
+ * @author  Thomas de Bruin, Daniël Wolters
+ * @version 23-01-2020
  */
 
 public class Game 
@@ -34,7 +31,7 @@ public class Game
     }
 
     /**
-     * Create all the rooms and link their exits together.
+     * Create all the rooms and link their exits together and set the items and set locks on rooms and Personage.
      */
     private void createRooms()
     {
@@ -96,11 +93,19 @@ public class Game
         player.setCurrentRoom(plein);
     }
 
+    /**
+     * Prints the exits and items of the room the player is currently in
+     */
     private void look()
     {
         System.out.println(player.getCurrentRoom().getLongDescription());
     }
 
+    /**
+     * Goes back to the room the player was previously in
+     * If there are no rooms to go back to
+     * prints: 'je kunt niet verder terug' 
+     */
     private void terug()
     {
         if(player.getVorigeKamers().isEmpty()) {
@@ -112,11 +117,10 @@ public class Game
         }
     }
 
-    private void geef()
-    {
-        System.out.println("Je hebt niks gegeven want je bezit niks #skeer");
-    }
-
+    /**
+     * Add the item that currently is in the room to the goodieBagga of the player
+     * If there are no items in the room print: 'kill ben je blind er ligt hier toch niks'  
+     */
     private void pak()
     {
         if(player.getCurrentRoom().getRoomItem().isEmpty()) {
@@ -125,21 +129,32 @@ public class Game
             player.addItem(player.getCurrentRoom().getRoomItem().get(0));
         }
     }
-    
-    private void uitgespeeld(){
-        uitgespeeld = true;
-    }
 
+    /**
+     * Drops the item that the player currently has in his goodieBagga to the room the
+     * player is currently in
+     */
     private void wegdoen()
     {
         player.dropItem();
     }
 
+    /**
+     * Print the item that is currently in the goodieBagga of the player
+     */
     private void inhoud()
     {
         player.inhoudGoodieBagga();
     }
 
+    /**
+     * Uses the item that the player currently has in his goodieBagga
+     * If there are no items in the goodieBagga print: 'je hebt niks om te gebruiken'
+     * If the player is 'op het plein' and has the item 'sleutel' unlocks stal
+     * If the player is in 'in de stal met paarden' en has the item 'mes' the item mes gets destroyed
+     * and the player recieves the item 'paardenvlees' in return
+     * Else print 'Er is hier niks om een actie uit te voeren'  
+     */
     private void gebruik()
     {
         if(player.validGoodieBagga() == false) {
@@ -187,9 +202,11 @@ public class Game
         }
         System.out.println("Bedankt voor het spelen, tot snel!");
     }
-    
-    
 
+/**
+ * Prints the exits of the room the player is currently in and the items if there are any
+ * also adds a whitespace at the last line
+ */
     public void printLocationInfo()
     {
 
@@ -203,18 +220,28 @@ public class Game
      */
     private void printWelcome()
     {
-        System.out.println();
-        System.out.println("Welkom in PonyPark Slagharen!");
-        System.out.println("Probeer de uitgang te vinden om het spel te winnen");
-        System.out.println("Typ 'help' als je hulp nodig hebt");
-        System.out.println();
+        System.out.println("*******************************************************************************");
+        System.out.println("*Welkom in PonyPark Slagharen!                                                *");
+        System.out.println("*Enkele eeuwen geleden vond hier een grote oorlog plaats.                     *");
+        System.out.println("*De Romeinen die het PonyPark Slagharen bezetten waren onder aanval           *");
+        System.out.println("*van de Grieken. PonyPark Slagharen was in die tijd een erg gewilde vestiging *");
+        System.out.println("*met buitengewone kwaliteiten. Helaas is door de wrede oorlog het PonyPark    *");
+        System.out.println("*grotendeels verwoest. Toch gaan er geruchten dat er nog leven is in het park.*");
+        System.out.println("*Wellicht kunnen deze levenden hulp bieden, of misschien toch niet hmmmm?     *");
+        System.out.println("*Je vindt jezelf op het plein in het Ponypark.                                *");
+        System.out.println("*Probeer de uitgang te vinden om het spel te winnen                           *");
+        System.out.println("*Typ 'help' als je hulp nodig m.b.t. de commands(alleen aangeraden voor n00bs)*");
+        System.out.println("*******************************************************************************");
         printLocationInfo();
         System.out.println();
     }
 
+    /**
+     * Creates a conversation with a Personage and checks if the conversastion is at its end and reacts based on that
+     * else proceeds the conversation
+     */
     private void gesprek() {
         boolean finished = false;
-        boolean klaar = false;
         while (! finished) {
             if(player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("Succes")) {
                 System.out.println("Heel fijn dat je er zo over denkt");
@@ -269,15 +296,17 @@ public class Game
                     System.out.println("Je moeder staat in je kamer en vraagt of je zin hebt in ontbijt");
                     System.out.println("Je realiseert je dat het allemaal een droom was en je loopt naar beneden om te gaan ontbijten");
                     System.out.println("Waneer je gaat zitten aan de keuekntafel zegt je moeder : 'Ik heb je favoriete eten klaargemaakt, paardenvlees!'");
+                    System.out.println();
+                    System.out.println("Gefeliciteerd broeder of zuster(jaja overal aan gedacht) u heeft het spel uitgespeeld!");
                     finished = true;
-                    klaar = true;
-                    
+                    uitgespeeld = true;
+
                 }
                 else {
                     System.out.println("Vind eerst het zadel en kom dan terug.");
                     finished = true;
                 }
-                
+
             } else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("snackie")){
                 System.out.println("* Je verlaat de kamer met een rond buikje en een snackie *");
                 player.setCurrentRoom(player.getCurrentRoom().getExit("oost"));
@@ -294,7 +323,7 @@ public class Game
                     player.getGoodieBagga().add(new Item("zadel"));
                     finished = true;
                 } else {
-                    
+
                     System.out.println("*Doogy is boos aangezien je het offer niet hebt en heeft je de kamer uitgezet*");
                     player.setCurrentRoom(player.getCurrentRoom().getExit("oost"));
                     printLocationInfo();
@@ -302,7 +331,7 @@ public class Game
                 } 
             } else if (player.getCurrentRoom().getPersonage().getAntwoorden().get("A").equals("hintje")) {
                 System.out.println("De snack van de dag is gemaakt van paard\nFijne dag verder");
-                
+
                 finished = true;
             }
             else {
@@ -310,13 +339,18 @@ public class Game
                 finished = processGesprek(command);
             }
         }
-        
-        if(klaar == true){
-            uitgespeeld();
-        }
-
     }
 
+    /**
+     * Process the conversation with a Personage
+     * Fills the answer of the the character based on what the player said and prints them
+     * If the player uses a command other the 'gebruik' continue the conversation
+     * If the player uses the command 'gebruik' check if its appropriate
+     * If the player is at the end of a conversation of uses the command 'gebruik'
+     * appropriate end the conversation
+     * @param command the Command the player types
+     * @return a boolean to check if the conversation should continue or not
+     */
     private boolean processGesprek(Command command)
     {
         boolean want_to_quit = false;
@@ -339,7 +373,7 @@ public class Game
             //Personage doogy = player.getCurrentRoom().getPersonage();
             poppetje.fillAntwoorden(poppetje.getAntwoorden().get("C"));
         }
-        else if (commandWord.equals("ga") || commandWord.equals("stop") || commandWord.equals("help") || commandWord.equals("kijk") || commandWord.equals("geef") || commandWord.equals("terug") ||
+        else if (commandWord.equals("ga") || commandWord.equals("stop") || commandWord.equals("help") || commandWord.equals("kijk") || commandWord.equals("terug") ||
         commandWord.equals("pak") || commandWord.equals("wegdoen") || commandWord.equals("inhoud")){
             System.out.println("Beantwoord mijn vraag broeder");
             return false;
@@ -372,6 +406,9 @@ public class Game
         return want_to_quit;
     }
 
+    /**
+     * Prints all the answers of the character 
+     */
     public void printAntwoorden() {
         System.out.println(player.getCurrentRoom().getPersonage().getOnderwerp() + "\n");
         System.out.print("A: " + player.getCurrentRoom().getPersonage().getAntwoorden().get("A") + "\n");
@@ -403,19 +440,20 @@ public class Game
         }
         else if (commandWord.equals("stop")) {
             wantToQuit = quit(command);
-            
+
         }
         else if (commandWord.equals("kijk")) {
             look();
         }
-        else if (commandWord.equals("geef")) {
-            geef();
-        } 
         else if (commandWord.equals("terug")) {
             terug();
         }
         else if (commandWord.equals("pak")) {
-            pak();
+            if(command.hasSecondWord()) {
+                System.out.println("Alleen pak is voldoende kill");
+            } else {
+                pak();
+            }
         }
         else if (commandWord.equals("wegdoen")) {
             wegdoen();
@@ -541,9 +579,8 @@ public class Game
             return false;
         }
         else {
-            
-            return true;  // signal that we want to quit
-            
+            return uitgespeeld = true;  // signal that we want to quit
+
         }
     }
 }

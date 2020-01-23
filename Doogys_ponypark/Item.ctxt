@@ -1,8 +1,10 @@
 #BlueJ class context
 comment0.target=Item
-comment0.text=\r\n\ class\ Item\ -\ geef\ hier\ een\ beschrijving\ van\ deze\ class\r\n\r\n\ @author\ (jouw\ naam)\r\n\ @version\ (versie\ nummer\ of\ datum)\r\n
+comment0.text=\r\n\ class\ Item\ -\ Creates\ an\ Item\ with\ an\ omschrijving\r\n\r\n\ @author\ Thomas\ de\ Bruin\ and\ Dani\u00EBl\ Wolters\r\n\ @version\ 23-01-2019\r\n
 comment1.params=omschrijving
 comment1.target=Item(java.lang.String)
+comment1.text=\r\n\ Create\ a\ new\ Item\ with\ the\ omschrijving\ of\ that\ Item\r\n\ @param\ a\ String\ with\ the\ omschrijving\ of\ that\ Item\r\n
 comment2.params=
 comment2.target=java.lang.String\ getOmschrijving()
+comment2.text=\r\n\ Gets\ the\ omschrijving\ of\ an\ Item\r\n\ @return\ returns\ a\ String\ with\ the\ omschrijving\ of\ that\ Item\r\n
 numComments=3

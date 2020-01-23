@@ -4,16 +4,18 @@ import java.util.ArrayList;
 /**
  * Class Room - a room in an adventure game.
  *
- * This class is part of the "World of Zuul" application. 
- * "World of Zuul" is a very simple, text based adventure game.  
+ * This class is part of the "Pony park Slagharen" application. 
+ *   
  *
  * A "Room" represents one location in the scenery of the game.  It is 
  * connected to other rooms via exits.  The exits are labelled north, 
- * east, south, west.  For each direction, the room stores a reference
+ * east, south, west, omhoog, omlaag.  For each direction, the room stores a reference
  * to the neighboring room, or null if there is no exit in that direction.
+ * 'Room' Also stores if there is an Item in the room or wheter the Room is locked or not 
+ * Also set the personges currently in the room
  * 
- * @author  Michael Kölling and David J. Barnes
- * @version 2016.02.29
+ * @author  Thomas de Bruin and Daniël Wolters
+ * @version 23-01-2020
  */
 public class Room 
 {
@@ -50,34 +52,61 @@ public class Room
         exits.put(direction, neighbor);
     }
 
+    /**
+     * Sets a Personage in the room
+     * @param the Personage the should be added to the Room
+     */
     public void setPersonage(Personage personage)
     {
         this.personage = personage;
     }
     
+    /**
+     * Gets the Personage the is currently in the room
+     * @return return the Personage the is currently in the room
+     */
     public Personage getPersonage()
     {
         return personage;
     }
     
+    /**
+     * Sets the slot on a room
+     * @param 'true' if the Room should be locked 'false' otherwise   
+     */
     public void setSlot(boolean slot) {
         this.slot=slot;
     }
     
+    /**
+     * Gets the slot of the current Room
+     * @return return the slot of the current Room
+     */
     public boolean getSlot() {
         return slot;
     }
     
+    /**
+     * Set an Item to the Room
+     * @param The Item that should be added to the Room
+     */
     public void setItem(Item item)
     {
         this.item.add(item);
     }
     
+    /**
+     * Gets the items that are currently in the room
+     * @return an ArrayList<Item> with the Item that are in the Room
+     */
     public ArrayList<Item> getRoomItem()
     {
         return item;
     }
     
+    /**
+     * Removes the Item that is in the Room
+     */
     public void removeItem()
     {
         item.remove(0);
@@ -91,6 +120,10 @@ public class Room
         return description;
     }
 
+    /**
+     * @return returns a Room based on the exit String given
+     * @param a String with the direction
+     */
     public Room getExit(String direction)
     {
         return exits.get(direction);
@@ -112,6 +145,11 @@ public class Room
         return returnString;
     }
     
+    /**
+     * Puts all the information of the room into a string
+     * like the Room omschrijving, exits and items
+     * @return the String containing the Room information
+     */
     public String getLongDescription()
     {
         String kamerOmschrijving = "";
