@@ -19,6 +19,12 @@ public class Game
     private Parser parser;
     private Player player;
     private boolean uitgespeeld;
+    
+    public static void main(String[] args)
+    {
+        Game game = new Game();
+        game.play();
+    }
     /**
      * Create the game and initialise its internal map.
      */
